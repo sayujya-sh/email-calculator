@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Sending Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+        .result-item {
+            margin: 5px 0;
+        }
+        .explanation {
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+    <script>
+        function calculate() {
+            const emailsPerMonth = Number(document.getElementById('emailsPerMonth').value) || 0;
+            const prospectsGoogle = Number(document.getElementById('prospectsGoogle').value) || 0;
+            const prospectsMicrosoft = Number(document.getElementById('prospectsMicrosoft').value) || 0;
+            const prospectsOther = Number(document.getElementById('prospectsOther').value) || 0;
+
+            const emailsPerDayPerAccount = 50; // Fixed daily sending limit
+            const daysInMonth = 30;
+
+            // Calculate email accounts required for each ESP
+            const emailAccountsGoogle = Math.ceil(prospectsGoogle / (emailsPerDayPerAccount * daysInMonth));
+            const emailAccountsMicrosoft = Math.ceil(prospectsMicrosoft / (emailsPerDayPerAccount * daysInMonth));
+            const emailAccountsOther = Math.ceil(prospectsOther / (emailsPerDayPerAccount * daysInMonth));
+
+            // Total accounts and domains required
+            const totalEmailAccounts = emailAccountsGoogle + emailAccountsMicrosoft + emailAccountsOther;
+            const totalDomains = Math.ceil(totalEmailAccounts / 5);
+
+            // Display the results with explanations
+            document.getElementById('results').innerHTML = `
+                <div class="result-item"><strong>Emails to send per day per email account:</strong> ${emailsPerDayPerAccount}
+                    <div class="explanation">This is a fixed value representing the maximum emails an account can send daily.</div>
+                </div>
+                <div class="result-item"><strong>Total email accounts required:</strong> ${totalEmailAccounts}
+                    <div class="explanation">Calculated as total emails per month divided by the daily capacity of one account, multiplied by 30 days.</div>
+                </div>
+                <div class="result-item"><strong>Total domains required:</strong> ${totalDomains}
+                    <div class="explanation">Calculated as total email accounts required divided by 5 accounts per domain.</div>
+                </div>
+                <div class="result-item"><strong>Email accounts required on Google:</strong> ${emailAccountsGoogle}
+                    <div class="explanation">Calculated as the number of Google ESP prospects divided by the daily capacity of one account over a month.</div>
+                </div>
+                <div class="result-item"><strong>Email accounts required on Microsoft:</strong> ${emailAccountsMicrosoft}
+                    <div class="explanation">Calculated as the number of Microsoft ESP prospects divided by the daily capacity of one account over a month.</div>
+                </div>
+                <div class="result-item"><strong>Email accounts required on Other ESP:</strong> ${emailAccountsOther}
+                    <div class="explanation">Calculated as the number of Other ESP prospects divided by the daily capacity of one account over a month.</div>
+                </div>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Email Sending Calculator</h1>
+        <p>Enter the following details to calculate the number of email accounts and domains required.</p>
+
+        <label for="emailsPerMonth">Number of emails to be sent in a month:</label>
+        <input type="number" id="emailsPerMonth" placeholder="e.g., 100000">
+
+        <label for="prospectsGoogle">Number of prospects (Google ESP):</label>
+        <input type="number" id="prospectsGoogle" placeholder="e.g., 10000">
+
+        <label for="prospectsMicrosoft">Number of prospects (Microsoft ESP):</label>
+        <input type="number" id="prospectsMicrosoft" placeholder="e.g., 15000">
+
+        <label for="prospectsOther">Number of prospects (Other ESP):</label>
+        <input type="number" id="prospectsOther" placeholder="e.g., 20000">
+
+        <button onclick="calculate()">Calculate</button>
+
+        <div id="results" class="results"></div>
+    </div>
+</body>
+</html>
